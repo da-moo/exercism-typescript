@@ -11,11 +11,19 @@ class RunLengthEncoding {
   }
 
   static decode(text: string): string {
-    const matches = text.match(/(\d*)([a-zA-Z]|\s)/);
+    const matches = text.match(/(\d*)([a-zA-Z]|\s)/g);
     if (matches === null) {
       return '';
     }
-    return text;
+    return matches.map(match => {
+        const splitMatch = match.match(/\s+|[a-zA-Z]+|\d+/g);
+        if (splitMatch !== null) {
+          const count = parseInt(splitMatch[0], 10) || 1;
+          const letter = count === 1 ? splitMatch[0] : splitMatch[1];
+          return letter.repeat(count);
+        }
+        return '';
+      }).join('');
   }
 }
 
