@@ -34,7 +34,7 @@ class SimpleCipher {
       .join("");
   }
 
-  private applyCipher(text: string, type: string): string {
+  private applyCipher(text: string, type: "encode" | "decode"): string {
     const mod = (n: number, m: number): number => ((n % m) + m) % m;
 
     const calculateShiftAmount = (stringIndex: number): number =>
@@ -47,14 +47,14 @@ class SimpleCipher {
         SimpleCipher.possible.length
       ) + SimpleCipher.firstCharCode;
 
-    const returnStringCodes = Array<number>(text.length);
-    for (const [index, char] of Array.from(text).entries()) {
-      let shiftAmount = calculateShiftAmount(index);
-      shiftAmount = type === "decode" ? 0 - shiftAmount : shiftAmount;
-      returnStringCodes[index] = calculateCharCode(char, shiftAmount);
-    }
+    const shiftDirection = type === "decode" ? -1 : 1;
 
-    return String.fromCharCode(...returnStringCodes);
+    return Array.from(text)
+      .map((char, index) => {
+        const shiftAmount = calculateShiftAmount(index) * shiftDirection;
+        return String.fromCharCode(calculateCharCode(char, shiftAmount));
+      })
+      .join("");
   }
 }
 
