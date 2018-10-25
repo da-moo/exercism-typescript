@@ -1,13 +1,13 @@
 class SimpleCipher {
-  private possible = 'abcdefghijklmnopqrstuvwxyz';
-  private randomKeyLength = 100;
-  private firstCharCode = this.possible.charCodeAt(0);
+  private static readonly possible = "abcdefghijklmnopqrstuvwxyz";
+  private static readonly randomKeyLength = 100;
+  private static readonly firstCharCode = SimpleCipher.possible.charCodeAt(0);
   private _key: string;
 
   constructor(key?: string) {
     if (key !== undefined) {
       if (key.match(/^[a-z]+$/) === null) {
-        throw new Error('Bad key');
+        throw new Error("Bad key");
       }
       this._key = key;
     } else {
@@ -20,21 +20,23 @@ class SimpleCipher {
   }
 
   encode(text: string): string {
-    return this.applyCipher(text, 'encode');
+    return this.applyCipher(text, "encode");
   }
 
   decode(text: string): string {
-    return this.applyCipher(text, 'decode');
+    return this.applyCipher(text, "decode");
   }
 
   private generateRandomKey(): string {
-    const stringBuilder: string[] = Array(this.randomKeyLength);
-    for (let i = 0; i < this.randomKeyLength; i++) {
-      const charPosition = Math.floor(Math.random() * this.possible.length);
-      const newChar = this.possible.charAt(charPosition);
+    const stringBuilder: string[] = Array(SimpleCipher.randomKeyLength);
+    for (let i = 0; i < SimpleCipher.randomKeyLength; i++) {
+      const charPosition = Math.floor(
+        Math.random() * SimpleCipher.possible.length
+      );
+      const newChar = SimpleCipher.possible.charAt(charPosition);
       stringBuilder[i] = newChar;
     }
-    return stringBuilder.join('');
+    return stringBuilder.join("");
   }
 
   private applyCipher(text: string, type: string): string {
@@ -45,23 +47,23 @@ class SimpleCipher {
     const calculateShiftAmount = (stringIndex: number): number => {
       return (
         this._key.charCodeAt(stringIndex % this._key.length) -
-        this.firstCharCode
+        SimpleCipher.firstCharCode
       );
     };
 
     const calculateCharCode = (char: string, shiftAmount: number): number => {
       return (
         mod(
-          char.charCodeAt(0) - this.firstCharCode + shiftAmount,
-          this.possible.length
-        ) + this.firstCharCode
+          char.charCodeAt(0) - SimpleCipher.firstCharCode + shiftAmount,
+          SimpleCipher.possible.length
+        ) + SimpleCipher.firstCharCode
       );
     };
 
     const returnStringCodes = Array<number>(text.length);
     for (const [index, char] of Array.from(text).entries()) {
       let shiftAmount = calculateShiftAmount(index);
-      shiftAmount = type === 'decode' ? 0 - shiftAmount : shiftAmount;
+      shiftAmount = type === "decode" ? 0 - shiftAmount : shiftAmount;
       returnStringCodes[index] = calculateCharCode(char, shiftAmount);
     }
 
