@@ -35,25 +35,17 @@ class SimpleCipher {
   }
 
   private applyCipher(text: string, type: string): string {
-    const mod = (n: number, m: number): number => {
-      return ((n % m) + m) % m;
-    };
+    const mod = (n: number, m: number): number => ((n % m) + m) % m;
 
-    const calculateShiftAmount = (stringIndex: number): number => {
-      return (
-        this._key.charCodeAt(stringIndex % this._key.length) -
-        SimpleCipher.firstCharCode
-      );
-    };
+    const calculateShiftAmount = (stringIndex: number): number =>
+      this._key.charCodeAt(stringIndex % this._key.length) -
+      SimpleCipher.firstCharCode;
 
-    const calculateCharCode = (char: string, shiftAmount: number): number => {
-      return (
-        mod(
-          char.charCodeAt(0) - SimpleCipher.firstCharCode + shiftAmount,
-          SimpleCipher.possible.length
-        ) + SimpleCipher.firstCharCode
-      );
-    };
+    const calculateCharCode = (char: string, shiftAmount: number): number =>
+      mod(
+        char.charCodeAt(0) - SimpleCipher.firstCharCode + shiftAmount,
+        SimpleCipher.possible.length
+      ) + SimpleCipher.firstCharCode;
 
     const returnStringCodes = Array<number>(text.length);
     for (const [index, char] of Array.from(text).entries()) {
