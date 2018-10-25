@@ -5,14 +5,10 @@ class SimpleCipher {
   private _key: string;
 
   constructor(key?: string) {
-    if (key !== undefined) {
-      if (key.match(/^[a-z]+$/) === null) {
-        throw new Error("Bad key");
-      }
-      this._key = key;
-    } else {
-      this._key = this.generateRandomKey();
+    if ((key && !key.match(/^[a-z]+$/)) || key === "") {
+      throw new Error("Bad key");
     }
+    this._key = key || this.generateRandomKey();
   }
 
   get key(): string {
