@@ -24,15 +24,14 @@ class SimpleCipher {
   }
 
   private generateRandomKey(): string {
-    const stringBuilder: string[] = Array(SimpleCipher.randomKeyLength);
-    for (let i = 0; i < SimpleCipher.randomKeyLength; i++) {
-      const charPosition = Math.floor(
-        Math.random() * SimpleCipher.possible.length
-      );
-      const newChar = SimpleCipher.possible.charAt(charPosition);
-      stringBuilder[i] = newChar;
-    }
-    return stringBuilder.join("");
+    return Array.from(Array(SimpleCipher.randomKeyLength))
+      .map(() => {
+        const charPosition = Math.floor(
+          Math.random() * SimpleCipher.possible.length
+        );
+        return SimpleCipher.possible[charPosition];
+      })
+      .join("");
   }
 
   private applyCipher(text: string, type: string): string {
