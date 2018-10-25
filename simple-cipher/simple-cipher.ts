@@ -2,17 +2,13 @@ class SimpleCipher {
   private static readonly possible = "abcdefghijklmnopqrstuvwxyz";
   private static readonly randomKeyLength = 100;
   private static readonly firstCharCode = SimpleCipher.possible.charCodeAt(0);
-  private _key: string;
+  readonly key: string;
 
   constructor(key?: string) {
     if ((key && !key.match(/^[a-z]+$/)) || key === "") {
       throw new Error("Bad key");
     }
-    this._key = key || this.generateRandomKey();
-  }
-
-  get key(): string {
-    return this._key;
+    this.key = key || this.generateRandomKey();
   }
 
   encode(text: string): string {
@@ -38,7 +34,7 @@ class SimpleCipher {
     const mod = (n: number, m: number): number => ((n % m) + m) % m;
 
     const calculateShiftAmount = (stringIndex: number): number =>
-      this._key.charCodeAt(stringIndex % this._key.length) -
+      this.key.charCodeAt(stringIndex % this.key.length) -
       SimpleCipher.firstCharCode;
 
     const calculateCharCode = (char: string, shiftAmount: number): number =>
