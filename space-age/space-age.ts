@@ -1,41 +1,28 @@
 export default class SpaceAge {
+  [k: string]: any;
   private static readonly EARTH_SECONDS_IN_YEAR = 31557600;
+  private static readonly PLANET_YEAR_SCALES = new Map<string, number>([
+    ['Earth', 1],
+    ['Mercury', 0.2408467],
+    ['Venus', 0.61519726],
+    ['Mars', 1.8808158],
+    ['Jupiter', 11.862615],
+    ['Saturn', 29.447498],
+    ['Uranus', 84.016846],
+    ['Neptune', 164.79132]
+  ]);
+
   public seconds: number;
 
   constructor(ageInSeconds: number) {
     this.seconds = ageInSeconds;
-  }
 
-  onEarth(): number {
-    return this.scaleToPlanetYears(1);
-  }
-
-  onMercury(): number {
-    return this.scaleToPlanetYears(0.2408467);
-  }
-
-  onVenus(): number {
-    return this.scaleToPlanetYears(0.61519726);
-  }
-
-  onMars(): number {
-    return this.scaleToPlanetYears(1.8808158);
-  }
-
-  onJupiter(): number {
-    return this.scaleToPlanetYears(11.862615);
-  }
-
-  onSaturn(): number {
-    return this.scaleToPlanetYears(29.447498);
-  }
-
-  onUranus(): number {
-    return this.scaleToPlanetYears(84.016846);
-  }
-
-  onNeptune(): number {
-    return this.scaleToPlanetYears(164.79132);
+    for (const [stellarBody, scale] of SpaceAge.PLANET_YEAR_SCALES) {
+      const funcName = 'on' + stellarBody;
+      SpaceAge.prototype[funcName] = () => {
+        return this.scaleToPlanetYears(scale);
+      };
+    }
   }
 
   private scaleToPlanetYears(scaleRelativeToEarthYears: number): number {
